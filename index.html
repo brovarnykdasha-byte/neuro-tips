@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seltene Neuro-Tipps</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0b14;
+  --surface: #141020;
+  --surface2: #1b1628;
+  --border: #221d32;
+  --text: #e8e4f0;
+  --muted: #6e6485;
+  --c1: #ff7b54;
+  --c2: #56cfb2;
+  --c3: #5eb8ff;
+  --c4: #c97bff;
+  --c5: #ff9f43;
+  --c6: #54a0ff;
+  --c7: #ff6b81;
+  --c8: #48dbaa;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── HEADER ── */
+header {
+  padding: 3rem 2.5rem 2rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.header-left { max-width: 600px; }
+
+.eyebrow {
+  font-size: 0.62rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.9rem;
+  opacity: 0;
+  animation: up 0.6s ease forwards 0.1s;
+}
+
+h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 0.8rem;
+  opacity: 0;
+  animation: up 0.6s ease forwards 0.25s;
+}
+
+h1 em {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--c1);
+}
+
+.subtitle {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.75;
+  opacity: 0;
+  animation: up 0.6s ease forwards 0.4s;
+}
+
+.header-stats {
+  display: flex;
+  gap: 2rem;
+  opacity: 0;
+  animation: up 0.6s ease forwards 0.5s;
+}
+
+.hstat { text-align: right; }
+.hstat-n {
+  font-family: 'Syne', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--c1);
+  line-height: 1;
+}
+.hstat-l { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-top: 2px; }
+
+/* ── LAYOUT ── */
+.layout {
+  display: flex;
+  flex: 1;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 200px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--border);
+  padding: 1.5rem 0;
+  position: sticky;
+  top: 0;
+  height: calc(100vh - 80px);
+  overflow-y: auto;
+  opacity: 0;
+  animation: up 0.5s ease forwards 0.6s;
+}
+
+.sidebar-label {
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  padding: 0 1.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.cat-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.6rem 1.5rem;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+  border-left: 2px solid transparent;
+}
+.cat-btn:hover { color: var(--text); background: var(--surface); }
+.cat-btn.active { color: var(--text); border-left-color: var(--c1); background: var(--surface); font-weight: 500; }
+
+.cat-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.cat-count { margin-left: auto; font-size: 0.65rem; opacity: 0.5; }
+
+.sidebar-divider { height: 1px; background: var(--border); margin: 1rem 1.5rem; }
+
+.search-wrap { padding: 0 1.5rem 0.5rem; }
+.search-input {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.75rem;
+  padding: 0.5rem 0.8rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.search-input::placeholder { color: var(--muted); }
+.search-input:focus { border-color: rgba(255,123,84,0.4); }
+
+/* ── MAIN ── */
+.main {
+  flex: 1;
+  padding: 1.5rem 2rem 5rem;
+  overflow-y: auto;
+}
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.section-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.section-count {
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+/* ── CARDS ── */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.4rem;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  opacity: 0;
+  animation: up 0.4s ease forwards;
+  position: relative;
+}
+
+.card:hover {
+  border-color: rgba(255,255,255,0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.9rem;
+}
+
+.card-num {
+  font-size: 0.58rem;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.card-tag {
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.card-accent-line {
+  height: 2px;
+  border-radius: 2px;
+  width: 24px;
+  margin-bottom: 0.9rem;
+}
+
+.card h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.35;
+  margin-bottom: 0.5rem;
+}
+
+.card .teaser {
+  font-size: 0.77rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+/* DETAIL */
+.detail {
+  display: none;
+  margin-top: 1.1rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--border);
+}
+.card.open .detail { display: block; }
+
+.who-says {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 0.72rem;
+  color: var(--c1);
+  margin-bottom: 0.8rem;
+  opacity: 0.9;
+}
+
+.detail-body {
+  font-size: 0.78rem;
+  color: #b0a8c8;
+  line-height: 1.78;
+  margin-bottom: 1rem;
+}
+
+.steps-label {
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+
+.steps-list { list-style: none; margin-bottom: 0.9rem; }
+.steps-list li {
+  font-size: 0.75rem;
+  color: #c8c0e0;
+  line-height: 1.65;
+  padding: 0.3rem 0 0.3rem 1.1rem;
+  position: relative;
+}
+.steps-list li::before {
+  content: '→';
+  position: absolute; left: 0;
+  font-size: 0.7rem;
+  opacity: 0.5;
+}
+
+.rarity-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.6rem;
+  padding: 0.22rem 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.toggle-hint {
+  font-size: 0.63rem;
+  color: var(--muted);
+  margin-top: 1rem;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+.card:hover .toggle-hint { opacity: 1; }
+
+/* ── BOTTOM BAR ── */
+.bottom-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 50px;
+  background: var(--surface2);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  z-index: 100;
+  opacity: 0;
+  animation: up 0.5s ease forwards 1.2s;
+}
+
+.bstat { display: flex; align-items: center; gap: 0.6rem; }
+.bstat-n { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--c1); }
+.bstat-l { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+
+.progress-wrap { width: 140px; height: 3px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--c1); border-radius: 3px; transition: width 0.4s ease; width: 0%; }
+
+/* NO RESULTS */
+.empty {
+  grid-column: 1/-1;
+  text-align: center;
+  padding: 3rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  display: none;
+}
+
+@keyframes up {
+  from { opacity:0; transform:translateY(14px); }
+  to { opacity:1; transform:translateY(0); }
+}
+
+@media (max-width: 700px) {
+  .sidebar { display: none; }
+  .header-stats { display: none; }
+  header { padding: 2rem 1.5rem 1.5rem; }
+  .main { padding: 1rem 1rem 5rem; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <p class="eyebrow">Neurologie · Psychologie · Selten bekannt</p>
+    <h1>manchmal nötiges Wissen<br><em>aber auch nur manchmal</em></h1>
+    <p class="subtitle">wiwiwiwiwiwiwiwiwiwiwiwiwiwiwiwiwiwiwi</p>
+  </div>
+  <div class="header-stats">
+    <div class="hstat"><div class="hstat-n">24</div><div class="hstat-l">Tipps total</div></div>
+    <div class="hstat"><div class="hstat-n" id="h-opened">0</div><div class="hstat-l">Entdeckt</div></div>
+  </div>
+</header>
+
+<div class="layout">
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="search-wrap">
+      <input class="search-input" id="search" placeholder="Suchen …" oninput="doFilter()">
+    </div>
+    <div class="sidebar-divider"></div>
+    <p class="sidebar-label">Kategorien</p>
+    <button class="cat-btn active" data-f="all">
+      <span class="cat-dot" style="background:#888"></span> Alle
+      <span class="cat-count" id="cnt-all">24</span>
+    </button>
+    <button class="cat-btn" data-f="kognition">
+      <span class="cat-dot" style="background:var(--c1)"></span> Kognition
+      <span class="cat-count" id="cnt-kognition"></span>
+    </button>
+    <button class="cat-btn" data-f="emotion">
+      <span class="cat-dot" style="background:var(--c2)"></span> Emotion
+      <span class="cat-count" id="cnt-emotion"></span>
+    </button>
+    <button class="cat-btn" data-f="gedaechtnis">
+      <span class="cat-dot" style="background:var(--c3)"></span> Gedächtnis
+      <span class="cat-count" id="cnt-gedaechtnis"></span>
+    </button>
+    <button class="cat-btn" data-f="schlaf">
+      <span class="cat-dot" style="background:var(--c4)"></span> Schlaf
+      <span class="cat-count" id="cnt-schlaf"></span>
+    </button>
+    <button class="cat-btn" data-f="koerper">
+      <span class="cat-dot" style="background:var(--c5)"></span> Körper & Gehirn
+      <span class="cat-count" id="cnt-koerper"></span>
+    </button>
+    <button class="cat-btn" data-f="sozial">
+      <span class="cat-dot" style="background:var(--c6)"></span> Soziales
+      <span class="cat-count" id="cnt-sozial"></span>
+    </button>
+    <button class="cat-btn" data-f="wahrnehmung">
+      <span class="cat-dot" style="background:var(--c7)"></span> Wahrnehmung
+      <span class="cat-count" id="cnt-wahrnehmung"></span>
+    </button>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main" id="main"></main>
+</div>
+
+<div class="bottom-bar">
+  <div class="bstat"><div class="bstat-n" id="b-vis">24</div><div class="bstat-l">sichtbar</div></div>
+  <div>
+    <div class="progress-wrap"><div class="progress-fill" id="prog"></div></div>
+  </div>
+  <div class="bstat"><div class="bstat-n" id="b-opened">0</div><div class="bstat-l">geöffnet</div></div>
+</div>
+
+<script>
+const CATS = {
+  kognition:  { label:'Kognition',      color:'var(--c1)' },
+  emotion:    { label:'Emotion',         color:'var(--c2)' },
+  gedaechtnis:{ label:'Gedächtnis',      color:'var(--c3)' },
+  schlaf:     { label:'Schlaf',          color:'var(--c4)' },
+  koerper:    { label:'Körper & Gehirn', color:'var(--c5)' },
+  sozial:     { label:'Soziales',        color:'var(--c6)' },
+  wahrnehmung:{ label:'Wahrnehmung',     color:'var(--c7)' },
+};
+
+const tips = [
+  { cat:'kognition',
+    who:'Dr. Robert Cialdini – Arizona State University',
+    title:'Pre-Suasion: den Moment VOR der Entscheidung gestalten',
+    teaser:'Was du kurz vor einer Aufgabe denkst oder siehst, verändert ihr Ergebnis dramatisch — ohne dass du es merkst.',
+    detail:'Cialdinis Forschung zeigt: Der mentale Zustand unmittelbar vor einer Tätigkeit konditioniert das Gehirn. Wer vor einem Kreativ-Meeting kurz Bilder von Freiheit sieht, denkt messbar kreativer. Wer vor einer schwierigen Aufgabe an eigene Stärken denkt, leistet objektiv mehr.',
+    steps:['Vor Kreativaufgaben: 2 Min. frei assoziieren oder Naturbilder ansehen','Vor Verhandlungen: Power Pose 2 Min. einnehmen','Vor dem Lernen: aufschreiben, warum das Thema wichtig ist','Schreibtisch-Objekte bewusst wählen — sie beeinflussen Denkweise subtil'],
+    rarity:'Kaum in Ratgebern erklärt' },
+
+  { cat:'gedaechtnis',
+    who:'Dr. Elizabeth Loftus – UC Irvine',
+    title:'Erinnerungen sind jedes Mal neu konstruiert',
+    teaser:'Jedes Mal, wenn du dich an etwas erinnerst, veränderst du die Erinnerung — bewusst oder unbewusst.',
+    detail:'Loftus\' Forschung beweist: Gedächtnis ist kein Videorekorder, sondern rekonstruktiv. Beim Abrufen wird die Erinnerung instabil (Rekonsolidierungsfenster) und kann durch neue Informationen oder Emotionen dauerhaft verändert werden.',
+    steps:['Erinnerungen mit positivem Kontext verknüpfen beim Abrufen','Traumatische Erinnerungen nicht immer wieder detailliert erzählen','Schlechte Erinnerung + Umschreibungsübung therapeutisch nutzen','Wichtige Erlebnisse zeitnah aufschreiben — sie driften schnell'],
+    rarity:'Selten praktisch angewendet' },
+
+  { cat:'emotion',
+    who:'Dr. Lisa Feldman Barrett – Northeastern University',
+    title:'Emotionen werden konstruiert, nicht ausgelöst',
+    teaser:'Du erlebst keine vorprogrammierten Emotionen — dein Gehirn konstruiert sie aus Körpersignalen und Erwartungen.',
+    detail:'Barrett widerlegt die klassische "Basic Emotions"-Theorie. Das Gehirn ist eine Vorhersagemaschine: es interpretiert körperliche Erregung basierend auf gelernten Konzepten. Dieselbe Erregung kann als Angst, Aufregung oder Wut konstruiert werden — je nach Kontext und Training.',
+    steps:['Körperliche Aktivierung als "Aufregung" statt "Angst" labeln — messbar wirksam','Emotionale Granularität trainieren: mehr Worte für Gefühle = mehr Kontrolle','Körperregulation zuerst: Herzrasen beruhigen, dann Emotion benennen','Eigene Emotionsgeschichte kennen: welche Konzepte wurden "eintrainiert"?'],
+    rarity:'Revolutionäre, wenig bekannte Theorie' },
+
+  { cat:'kognition',
+    who:'Dr. Stanislas Dehaene – Collège de France',
+    title:'Globaler Arbeitsraum: wie Bewusstsein entsteht',
+    teaser:'Bewusstsein ist kein kontinuierlicher Strom — es entsteht in Schwellen-Momenten, wenn Infos ins ganze Gehirn gesendet werden.',
+    detail:'Dehaenes Global Workspace Theory erklärt, warum wir nur einen Gedanken bewusst haben können. Das Gehirn sendet Informationen in einem "ignition"-Moment ins gesamte Kortexnetzwerk. Was diese Schwelle nicht erreicht, bleibt unbewusst und beeinflusst uns trotzdem.',
+    steps:['Monotasking statt Multitasking: nur eine Info erreicht den Workspace','Stille fördert bewusste Verarbeitung — Hintergrundlärm reduziert Kapazität','Schreiben externalisiert den Workspace und erhöht kognitive Tiefe','Schlaf ist entscheidend: Konsolidierung passiert im Tiefschlaf'],
+    rarity:'Grundlagenforschung, praktisch kaum erklärt' },
+
+  { cat:'koerper',
+    who:'Dr. Alan Watkins – HeartMath Institute',
+    title:'Das Herz sendet mehr Signale ans Gehirn als umgekehrt',
+    teaser:'Das Herz hat ein eigenes Nervensystem — und seine rhythmischen Signale formen direkt die Gehirnaktivität.',
+    detail:'Das Herz besitzt ~40.000 Neuronen und sendet über den Vagusnerv deutlich mehr Signale ans Gehirn als es empfängt. Herzrhythmusvariabilität (HRV) moduliert direkt Amygdala-Reaktivität und kognitive Flexibilität. Kohärentes Atemmuster synchronisiert Herz und Gehirn.',
+    steps:['Kohärenzatmen: 5 Sek. ein, 5 Sek. aus — 5–10 Min. täglich','HRV-Training via App (Polar H10 + HRV4Training) für Biofeedback','Positive Emotionen aktiv erzeugen vor Atemübung verstärkt Effekt','Morgens HRV messen: Tages-Readiness ablesen'],
+    rarity:'Aus der Kardiologie, selten in Psychologie' },
+
+  { cat:'wahrnehmung',
+    who:'Dr. Anil Seth – University of Sussex',
+    title:'Du halluzinierst die Realität — kontrolliert',
+    teaser:'Was du siehst, ist keine direkte Aufnahme der Welt. Es ist die beste Vorhersage, die dein Gehirn konstruiert.',
+    detail:'Seth nennt Wahrnehmung "controlled hallucination". Das Gehirn erzeugt ständig Vorhersagen und vergleicht sie mit Sinnesinput. Was du wahrnimmst, ist fast immer die interne Vorhersage — das erklärt Illusionen, Placebos und warum Erwartungen so mächtig sind.',
+    steps:['Erwartungen bewusst setzen: sie verändern buchstäblich die Wahrnehmung','Placebo-Effekt nutzen: Rituale erhöhen Erwartung und Wirkung','Kognitive Umrahmung ist neurobiologisch real — nicht nur positives Denken','Meditation hilft, Vorhersage-Muster zu erkennen und aufzulösen'],
+    rarity:'Cutting-edge Bewusstseinsforschung' },
+
+  { cat:'gedaechtnis',
+    who:'Dr. Gary Marcus – NYU',
+    title:'Das Gehirn ist kein gut designtes System — und das hilft',
+    teaser:'Wissen um evolutionäre "Bugs" im Gehirn schützt vor ihnen. Ignoranz macht sie stärker.',
+    detail:'Marcus zeigt, wie viele kognitive Fehler aus evolutionären Kompromissen entstehen: das Gehirn sucht Muster auch wo keine sind, überschätzt Verfügbarkeit von Information und denkt in Narrativen statt Statistiken.',
+    steps:['Verfügbarkeitsheuristik: Häufigkeit ≠ Auffälligkeit — aktiv korrigieren','Confirmation Bias: aktiv nach Gegenbeispielen suchen','Daten vor Geschichten analysieren bei Entscheidungen','"Pre-Mortem"-Methode: wie könnte die Entscheidung scheitern?'],
+    rarity:'Selten als praktisches Werkzeug erklärt' },
+
+  { cat:'schlaf',
+    who:'Dr. Matthew Walker – UC Berkeley',
+    title:'Schlafspindeln: der unbekannte Gedächtnismotor',
+    teaser:'Schlafspindeln in NREM-Phasen transferieren Lerninhalte vom Hippocampus in den Kortex — und du kannst sie steigern.',
+    detail:'Schlafspindeln sind kurze Bursts elektrischer Aktivität (12–15 Hz) im NREM-Schlaf. Sie sind der Mechanismus, durch den das Gehirn Tageserlebnisse in Langzeitgedächtnis umwandelt. Ihre Anzahl variiert stark und kann durch Verhalten beeinflusst werden.',
+    steps:['Letzten Schlafzyklus nicht abschneiden — meiste Spindeln am Morgen','Magnesium + Zink abends fördern NREM-Qualität nachweislich','Kühles Zimmer: Körperkerntemperatur muss sinken','Napping 20–30 Min. nachmittags erhöht Abend-Spindelaktivität'],
+    rarity:'Schlaflabor-Wissen, selten kommuniziert' },
+
+  { cat:'koerper',
+    who:'Dr. Bessel van der Kolk – Boston University',
+    title:'Trauma lebt im Körper, nicht im Kopf',
+    teaser:'Unverarbeitetes Trauma hinterlässt physiologische Muster — die Kognition allein kann das nicht auflösen.',
+    detail:'Van der Kolks Forschung zeigt: Trauma verändert nicht nur Gedanken, sondern Körperhaltung, Atemrhythmus und das vegetative Nervensystem. Rein kognitive Therapien sind oft unzureichend. Körperbasierte Ansätze erreichen Bereiche, die Gesprächstherapie nicht berührt.',
+    steps:['Yoga, Somatic Experiencing oder EMDR als Ergänzung zu Gesprächstherapie','Körper-Scan täglich: wo halte ich Spannung?','Humming, Gargling aktivieren Vagusnerv direkt','Rhythmische Bewegung oft therapeutischer als Nachdenken'],
+    rarity:'Aus der Traumaforschung, selten allgemein bekannt' },
+
+  { cat:'sozial',
+    who:'Dr. Nicholas Christakis – Yale University',
+    title:'Soziale Ansteckung: Gefühle verbreiten sich wie Viren',
+    teaser:'Dein emotionaler Zustand beeinflusst Menschen 3 Grades entfernt — Bekannte von Bekannten von Bekannten.',
+    detail:'Christakis\' Netzwerk-Studien belegen: Glück, Einsamkeit und Depressionen verbreiten sich in sozialen Netzwerken. Dein Wohlbefinden beeinflusst statistisch das deiner Bekannten — und deren Bekannten.',
+    steps:['Bewusst auswählen, mit wem du Zeit verbringst — Emotionen sind ansteckend','Positive "emotionale Steckdosen" im Netzwerk kultivieren','Einsame Kontakte aktiv einbinden — Einsamkeit ist sozial ansteckend','Dein Wohlbefinden ist eine soziale Verantwortung'],
+    rarity:'Netzwerkwissenschaft, selten persönlich angewandt' },
+
+  { cat:'emotion',
+    who:'Dr. Paul Ekman – UCSF',
+    title:'Mikro-Ausdrücke lesen — und eigene kontrollieren',
+    teaser:'Das Gehirn zeigt wahre Emotionen in Gesichtsregungen von 1/25 Sekunde — unkontrollierbar, aber erkennbar.',
+    detail:'Ekman entdeckte Mikro-Ausdrücke: blitzartige Gesichtsregungen, die echte Emotionen verraten, bevor bewusste Kontrolle eingreift. Auch unsere eigenen Mikro-Ausdrücke beeinflussen unsere Emotionen rückwärts.',
+    steps:['Facial Feedback: Lächeln (auch erzwungen) senkt Cortisol messbar','Kiefer, Stirn und Schultern bewusst entspannen','FACS (Facial Action Coding System) — Ekman bietet Online-Trainings','Spiegel-Übung morgens: welchen Ausdruck zeigst du unbewusst?'],
+    rarity:'Aus geheimdienstlicher Forschung, jetzt offen' },
+
+  { cat:'kognition',
+    who:'Dr. Gabriele Oettingen – NYU / Universität Hamburg',
+    title:'Positive Visualisierung allein schadet — WOOP hilft',
+    teaser:'Reines positives Denken senkt Motivation. WOOP kombiniert Wunsch und Hindernisse für echten Erfolg.',
+    detail:'Oettingens Forschung zeigt: Bloßes Visualisieren von Erfolg senkt Energie, weil das Gehirn den Zustand als bereits erreicht behandelt. Die WOOP-Methode erhöht Zielerreichung messbar.',
+    steps:['W: Wunsch klar formulieren (realistisch, aber herausfordernd)','O: Bestes Ergebnis lebhaft visualisieren (max. 2–3 Min.)','O: Das größte innere Hindernis identifizieren','P: If-Then-Plan: "Wenn X, dann mache ich Y" (konkret!)'],
+    rarity:'Kontraintuitiv und wissenschaftlich robust' },
+
+  { cat:'wahrnehmung',
+    who:'Dr. David Eagleman – Stanford',
+    title:'Zeitwahrnehmung ist plastisch und trainierbar',
+    teaser:'Dein Gehirn konstruiert Zeit — unter bestimmten Bedingungen dehnt oder komprimiert es sie.',
+    detail:'Eagleman zeigt: Zeit ist keine objektive Erfahrung. Neuheit, Gefahr, Aufmerksamkeit und Körperstoffwechsel verändern die subjektive Zeitwahrnehmung drastisch. Routine beschleunigt das Leben subjektiv — das ist steuerbar.',
+    steps:['Regelmäßig neue Erfahrungen machen — Neuheit verlängert das Leben subjektiv','Novelty-Seeking: neue Wege, Restaurants, Hobbys gezielt einbauen','Meditation verlangsamt Zeitwahrnehmung messbar','Tiefe Präsenz (Flow) "dehnt" Zeit'],
+    rarity:'Aus der Zeitwahrnehmungsforschung' },
+
+  { cat:'gedaechtnis',
+    who:'Dr. Henry Roediger – Washington University',
+    title:'Testing Effect: Abfragen ist 4× wirkungsvoller als Wiederholen',
+    teaser:'Sich selbst zu testen — auch wenn man scheitert — stärkt das Gedächtnis dramatisch mehr als erneutes Lesen.',
+    detail:'Der "Testing Effect" ist eine der robustesten Entdeckungen der Kognitionswissenschaft: Aktives Abrufen stärkt Synapsen weit stärker als passives Wiederholen. Scheitern beim Abrufen aktiviert den Suchprozess und macht die Spur tiefer.',
+    steps:['Flashcards (Anki) statt Markieren — immer aktiv abrufen','Ohne Notizen versuchen, das Gelernte aufzuschreiben','Lernpartner: sich gegenseitig abfragen statt gemeinsam lesen','"Desirable Difficulties": leichtes Vergessen ist gut'],
+    rarity:'Robust, aber in Schulen kaum gelehrt' },
+
+  { cat:'schlaf',
+    who:'Dr. Penelope Lewis – Cardiff University',
+    title:'Targeted Memory Reactivation: gezielt im Schlaf lernen',
+    teaser:'Töne oder Gerüche beim Lernen, dann im Schlaf wiederholt, reaktivieren Gedächtnisinhalte selektiv.',
+    detail:'Lewis\' Forschung zeigt: Wenn du beim Lernen einen bestimmten Ton oder Geruch dazu spielst und diesen dann im Tiefschlaf sanft wiederholst, reaktiviert das Gehirn selektiv die verknüpften Erinnerungen.',
+    steps:['Beim Lernen leise spezifische Hintergrundmusik (immer dieselbe)','Dieselbe Musik sehr leise während des Einschlafens (Timer stellen)','Ätherische Öle beim Lernen + im Schlafzimmer ausprobieren','Konsistenz wichtig: immer dieselben Trigger für denselben Inhalt'],
+    rarity:'Neueste Schlafforschung, kaum allgemein bekannt' },
+
+  { cat:'koerper',
+    who:'Dr. Andrew Huberman – Stanford',
+    title:'Panorama-Sehen aktiviert sofort Entspannung',
+    teaser:'Wenn du deinen Blick weit und weich machst, schaltet das Stresssystem sofort ab.',
+    detail:'Huberman beschreibt den "optic flow"-Effekt: enger Fokus aktiviert das sympathische System. Weiter, weicher Blick — wie bei Panoramen — aktiviert das parasympathische System. Das ist ein direkter, sofortiger neuronaler Schalter.',
+    steps:['Blick weich machen: Peripherie bewusst wahrnehmen, nicht fokussieren','2–3 Min. Panorama-Sehen nach intensiven Fokussessions','In der Natur funktioniert es automatisch','Abends: keine nahen Bildschirme, lieber weiten Raum anschauen'],
+    rarity:'Aus der visuellen Neurobiologie, kaum bekannt' },
+
+  { cat:'sozial',
+    who:'Dr. John Cacioppo – University of Chicago',
+    title:'Einsamkeit verändert Genexpression innerhalb von Wochen',
+    teaser:'Chronische Einsamkeit aktiviert entzündliche Gene und deaktiviert antivirale Gene — messbar im Blut.',
+    detail:'Cacioppos Forschung ist erschreckend klar: Einsamkeit verändert, welche Gene aktiv sind. Innerhalb von Wochen sozialer Isolation steigen Entzündungsmarker, sinkt Immunabwehr und erhöht sich der Kortisolbaseline.',
+    steps:['Qualität > Quantität: 1–2 tiefe Verbindungen schützen mehr als viele oberflächliche','Gefühlte Verbundenheit zählt — auch Briefe oder Anrufe','Loneliness Trap: Einsamkeit macht soziale Kontakte aversiver','Haustiere und ehrenamtliche Arbeit schützen messbar'],
+    rarity:'Aus der sozialen Genomik, erschreckend selten diskutiert' },
+
+  { cat:'emotion',
+    who:'Dr. James Gross – Stanford',
+    title:'Mit sich selbst in dritter Person sprechen',
+    teaser:'„Was würde [dein Name] tun?" statt „Was soll ich tun?" aktiviert einen anderen Verarbeitungsmodus.',
+    detail:'Gross und Kross zeigen: Sich selbst in der dritten Person zu betrachten aktiviert den medialen präfrontalen Kortex stärker und reduziert Amygdala-Reaktivität. Es erzeugt psychologische Distanz ohne emotionale Kälte.',
+    steps:['Bei Entscheidungen: "Was würde [Name] hier tun?"','Journaling in dritter Person bei emotionalen Themen ausprobieren','Self-talk: "Du schaffst das" wirkt besser als "Ich schaffe das"','Distanzierung ≠ Unterdrückung — Gefühle werden klarer, nicht weniger'],
+    rarity:'Kontraintuitiv und kaum bekannt' },
+
+  { cat:'kognition',
+    who:'Dr. Amos Tversky & Daniel Kahneman – Verhaltensökonomie',
+    title:'Peak-End Rule: nur 2 Momente definieren eine Erfahrung',
+    teaser:'Das Gehirn bewertet Erlebnisse fast ausschließlich nach dem intensivsten Moment und dem Ende.',
+    detail:'Kahneman beweist: Die Duration einer Erfahrung wird fast vollständig ignoriert. Was bleibt, ist der Peak und das Ende. Anwendbar auf Meetings, Gespräche, Urlaube.',
+    steps:['Meetings bewusst positiv beenden — die letzten 2 Min. zählen überproportional','Unangenehme Aufgaben mit einer Belohnung abschließen','Urlaub: das Ende nicht vernachlässigen','Gespräche mit einem emotionalen Highlight bewusst gestalten'],
+    rarity:'Aus der Verhaltensökonomie, selten persönlich genutzt' },
+
+  { cat:'wahrnehmung',
+    who:'Dr. Michael Graziano – Princeton',
+    title:'Attention Schema Theory: Aufmerksamkeit hat ein Selbstmodell',
+    teaser:'Das Gehirn baut ein vereinfachtes Modell der eigenen Aufmerksamkeit — und dieses Modell ist oft falsch.',
+    detail:'Grazianos Theorie: Das Gehirn kontrolliert Aufmerksamkeit nicht direkt, sondern über ein vereinfachtes Modell davon. Wir denken, wir achten auf etwas, während wir es in Wahrheit nicht tun.',
+    steps:['Regelmäßige "Attention Checks": worauf bin ich gerade wirklich fokussiert?','Meditation als Training des Aufmerksamkeits-Selbstmodells','Handy-Logs zeigen, wie oft man wirklich fokussiert war','Bei schwachem Modell: externe Struktur hilft mehr als Willenskraft'],
+    rarity:'Avantgarde Neurowissenschaft' },
+
+  { cat:'koerper',
+    who:'Dr. Moshe Feldenkrais – Neurophysiologie & Bewegung',
+    title:'Bewegungslernen durch minimalen Aufwand',
+    teaser:'Das Nervensystem lernt am schnellsten durch minimale, langsame Bewegung — nicht durch Wiederholung.',
+    detail:'Feldenkrais entdeckte: Das Gehirn kann feine Unterschiede nur wahrnehmen, wenn der Gesamtaufwand gering ist (Webers Gesetz). Langsame, kleine Bewegungen mit maximaler Aufmerksamkeit reorganisieren motorische Kortex-Karten schneller als intensive Wiederholung.',
+    steps:['Neue Bewegungen: langsam, klein, neugierig — nicht kraftvoll','ATM (Awareness Through Movement): geführte Feldenkrais-Lektionen online','Musiker und Athleten: 20% der normalen Intensität, 100% Aufmerksamkeit','Imaginäre Bewegungen aktivieren denselben Kortex wie echte'],
+    rarity:'Aus der Neurophysiologie, unterschätzt' },
+
+  { cat:'sozial',
+    who:'Dr. Uri Hasson – Princeton',
+    title:'Neural Coupling: Gehirne synchronisieren sich beim Zuhören',
+    teaser:'Wenn jemand dir eine Geschichte erzählt, spiegelt dein Gehirn das des Erzählers — mit bis zu 3 Sek. Vorsprung.',
+    detail:'Hassons fMRI-Studien zeigen: Beim Zuhören synchronisieren sich Zuhörer- und Erzähler-Gehirn in fast identischen Arealen. Je stärker die Synchronisation, desto besser das Verständnis.',
+    steps:['Echtes Zuhören > zu Wort kommen warten: Gehirne koppeln nur bei Präsenz','Geschichten > Fakten: Narrative koppeln Gehirne tiefer','Augenkontakt und physische Nähe stärken neuronale Kopplung','Qualität eines Gesprächs messen: "War ich wirklich im Kopf der anderen Person?"'],
+    rarity:'Aus bildgebender Forschung, revolutionär für Kommunikation' },
+
+  { cat:'gedaechtnis',
+    who:'Dr. Karl Deisseroth – Stanford',
+    title:'Optogenetik: Erinnerungen können reaktiviert und verändert werden',
+    teaser:'Mit Licht können einzelne Erinnerungsengramme gezielt aktiviert werden — ein Fenster in die Zukunft der Psychotherapie.',
+    detail:'Deisseroths Optogenetik-Forschung zeigt: Angsterinnerungen können durch simultane Reaktivierung mit positiven Erlebnissen dauerhaft überschrieben werden. Die klinische Anwendung ist bereits in Entwicklung.',
+    steps:['Heute nutzbar: Exposition + positiver Kontext = Gegenkonditionierung','Angsterinnerungen nicht verdrängen, sondern in sicherem Kontext reaktivieren','EMDR nutzt ähnliche Prinzipien','Körperliche Entspannung während des Erinnerns verändert die Erinnerungsspur'],
+    rarity:'Grundlagenforschung mit direkten Implikationen' },
+
+  { cat:'schlaf',
+    who:'Dr. Giulio Tononi – University of Wisconsin',
+    title:'Synaptic Homeostasis: Schlaf löscht gezielt schwache Verbindungen',
+    teaser:'Im Schlaf schwächt das Gehirn aktiv überflüssige Synapsen ab — um die wichtigen zu schärfen.',
+    detail:'Tononis Synaptic Homeostasis Hypothesis: Wachheit steigert kontinuierlich Synapsenverbindungen. Im Schlaf werden selektiv schwache Verbindungen abgebaut — wodurch Signal-Rausch-Verhältnis und Lernkapazität am nächsten Tag regeneriert werden.',
+    steps:['Schlafentzug vernichtet buchstäblich Lernkapazität','Tiefschlaf maximieren: kühles Zimmer, kein Alkohol','Vor dem Schlafen keine neuen Reize mehr','Power Naps (20 Min.) starten mini-Homeostase-Prozesse tagsüber'],
+    rarity:'Fundamentale Schlafwissenschaft, neu formuliert' },
+
+  { cat:'kognition',
+    who:'Dr. Mihaly Csikszentmihalyi – Claremont Graduate University',
+    title:'Flow durch Challenge-Skill-Balance herbeiführen',
+    teaser:'Flow ist kein Glücksfall — er hat eine präzise neurobiologische Formel.',
+    detail:'Csikszentmihalyi zeigt: Flow entsteht, wenn Herausforderung und Fähigkeit in Balance sind. Zu leicht → Langeweile; zu schwer → Angst. Die Präzision dieser Balance ist trainierbar. Im Flow-Zustand ist der präfrontale Kortex teilweise inaktiviert (Transient Hypofrontality) — das innere Kritikersystem schweigt.',
+    steps:['Aufgaben aktiv skalieren: etwas schwerer als aktuell komfortabel','Externe Unterbrechungen eliminieren (Flow braucht 15 Min. Anlaufzeit)','Klare Ziele setzen: ohne Richtung kein Flow','Direktes Feedback einbauen: man muss den Fortschritt spüren'],
+    rarity:'Bekannt, aber selten bewusst angewendet' },
+];
+
+let opened = new Set();
+let currentF = 'all', currentS = '';
+
+// Count per category
+const counts = {};
+tips.forEach(t => { counts[t.cat] = (counts[t.cat]||0)+1; });
+Object.keys(counts).forEach(k => {
+  const el = document.getElementById('cnt-'+k);
+  if (el) el.textContent = counts[k];
+});
+document.getElementById('cnt-all').textContent = tips.length;
+
+function doFilter() {
+  currentS = document.getElementById('search').value.toLowerCase();
+  render();
+}
+
+function render() {
+  const main = document.getElementById('main');
+  main.innerHTML = '';
+
+  const catsToShow = currentF === 'all'
+    ? Object.keys(CATS)
+    : [currentF];
+
+  let totalVisible = 0;
+
+  catsToShow.forEach(cat => {
+    const filtered = tips.filter((t, i) => {
+      if (t.cat !== cat) return false;
+      if (currentS && !t.title.toLowerCase().includes(currentS) &&
+          !t.teaser.toLowerCase().includes(currentS) &&
+          !t.detail.toLowerCase().includes(currentS) &&
+          !t.who.toLowerCase().includes(currentS)) return false;
+      return true;
+    });
+
+    if (filtered.length === 0) return;
+    totalVisible += filtered.length;
+
+    const sec = document.createElement('div');
+    sec.innerHTML = `
+      <div class="section-header">
+        <span class="section-title" style="color:${CATS[cat].color}">${CATS[cat].label}</span>
+        <span class="section-count">${filtered.length} Tipp${filtered.length>1?'s':''}</span>
+      </div>
+    `;
+
+    const grid = document.createElement('div');
+    grid.className = 'cards-grid';
+
+    filtered.forEach((t, ri) => {
+      const i = tips.indexOf(t);
+      const card = document.createElement('div');
+      card.className = 'card' + (opened.has(i) ? ' open' : '');
+      card.style.animationDelay = `${ri * 0.05}s`;
+      const col = CATS[cat].color;
+
+      card.innerHTML = `
+        <div class="card-header">
+          <span class="card-num">№ ${String(i+1).padStart(2,'0')}</span>
+          <span class="card-tag" style="background:${col}18;color:${col}">${CATS[cat].label}</span>
+        </div>
+        <div class="card-accent-line" style="background:${col}"></div>
+        <h2>${t.title}</h2>
+        <p class="teaser">${t.teaser}</p>
+        <div class="detail">
+          <p class="who-says">${t.who}</p>
+          <p class="detail-body">${t.detail}</p>
+          <p class="steps-label">Praktische Anwendung</p>
+          <ul class="steps-list">${t.steps.map(s=>`<li>${s}</li>`).join('')}</ul>
+          <span class="rarity-badge">◈ ${t.rarity}</span>
+        </div>
+        <div class="toggle-hint">${opened.has(i) ? '▲ schließen' : '▼ Details & Quelle'}</div>
+      `;
+
+      card.addEventListener('click', () => {
+        card.classList.toggle('open');
+        const h = card.querySelector('.toggle-hint');
+        if (card.classList.contains('open')) {
+          h.textContent = '▲ schließen';
+          opened.add(i);
+        } else {
+          h.textContent = '▼ Details & Quelle';
+        }
+        const n = opened.size;
+        document.getElementById('b-opened').textContent = n;
+        document.getElementById('h-opened').textContent = n;
+        document.getElementById('prog').style.width = (n / tips.length * 100) + '%';
+      });
+
+      grid.appendChild(card);
+    });
+
+    sec.appendChild(grid);
+    main.appendChild(sec);
+  });
+
+  if (totalVisible === 0) {
+    main.innerHTML = '<div class="empty" style="display:block;color:var(--muted);text-align:center;padding:4rem;font-size:0.85rem;">Keine Tipps gefunden.</div>';
+  }
+
+  document.getElementById('b-vis').textContent = totalVisible;
+}
+
+document.querySelectorAll('.cat-btn').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.cat-btn').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    currentF = b.dataset.f;
+    render();
+  });
+});
+
+render();
+</script>
+</body>
+</html>
